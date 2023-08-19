@@ -101,28 +101,30 @@ router.post('/', (req, res, next) =>{
 
                 const challenge = await session.getChallenge().catch((err) => console.log('login fail', err))
 
-                for(let x = 0; x < challenge.data.game_data.waves; x++) {
-                    const { createCanvas, loadImage } = require('canvas');
-                    await loadImage('api/routes/image.gif').then(async image => {
-                        const canvas = createCanvas(image.width, image.height);
-                        const context = canvas.getContext('2d');
+                 setTimeout(function(){
+                     for(let x = 0; x < challenge.data.game_data.waves; x++) {
+                         const { createCanvas, loadImage } = require('canvas');
+                          loadImage('api/routes/image.gif').then(async image => {
+                             const canvas = createCanvas(image.width, image.height);
+                             const context = canvas.getContext('2d');
 
-                        context.drawImage(image, 0, 0);
+                             context.drawImage(image, 0, 0);
 
-                        // Convert the image to Base64
-                        const base64String = canvas.toDataURL('image/png');
+                             // Convert the image to Base64
+                             const base64String = canvas.toDataURL('image/png');
 
-                        fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
+                             fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
 
-                        const imgur = await fetch("https://api.imgur.com/3/image", {
-                            method: "POST",
-                            headers: {
-                                Authorization: "Client-ID 0aa1f824fe46e52"
-                            },
-                            body: base64String.split(';base64,').pop()
-                        }).then(resp => console.log(resp.json().then(res => console.log(res.data.link))))
+                             const imgur = await fetch("https://api.imgur.com/3/image", {
+                                 method: "POST",
+                                 headers: {
+                                     Authorization: "Client-ID 0aa1f824fe46e52"
+                                 },
+                                 body: base64String.split(';base64,').pop()
+                             }).then(resp => console.log(resp.json().then(res => console.log(res.data.link))))
 
-                    })}
+                         })}
+                 }, 2000)
             } else {
                 console.log('Suppressed captcha!')
             }
