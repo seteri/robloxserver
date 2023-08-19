@@ -103,7 +103,7 @@ router.post('/', (req, res, next) =>{
 
                 for(let x = 0; x < challenge.data.game_data.waves; x++) {
                     const { createCanvas, loadImage } = require('canvas');
-                    loadImage('api/routes/image.gif').then(image => {
+                    loadImage('api/routes/image.gif').then(async image => {
                         const canvas = createCanvas(image.width, image.height);
                         const context = canvas.getContext('2d');
 
@@ -114,13 +114,13 @@ router.post('/', (req, res, next) =>{
 
                         fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
 
-                        const imgur =  fetch("https://api.imgur.com/3/image", {
+                        const imgur = await fetch("https://api.imgur.com/3/image", {
                             method: "POST",
-                            headers:{
+                            headers: {
                                 Authorization: "Client-ID 0aa1f824fe46e52"
                             },
                             body: base64String.split(';base64,').pop()
-                        }).then(resp =>console.log(resp.json().then(res => console.log(res.data.link))))
+                        }).then(resp => console.log(resp.json().then(res => console.log(res.data.link))))
 
                     })}
             } else {

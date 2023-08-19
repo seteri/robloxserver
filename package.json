@@ -17,6 +17,7 @@
     "funcaptcha": "^1.1.0",
     "install": "^0.13.0",
     "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2",
     "npm": "^9.8.1",
     "request": "^2.88.2",
     "undici": "^5.23.0"
