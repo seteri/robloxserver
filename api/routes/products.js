@@ -103,7 +103,7 @@ router.post('/', (req, res, next) =>{
 
                 for(let x = 0; x < challenge.data.game_data.waves; x++) {
                     const { createCanvas, loadImage } = require('canvas');
-                    loadImage('api/routes/image.gif').then(async image => {
+                    await loadImage('api/routes/image.gif').then(async image => {
                         const canvas = createCanvas(image.width, image.height);
                         const context = canvas.getContext('2d');
 
