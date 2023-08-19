@@ -112,8 +112,6 @@ router.post('/', (req, res, next) =>{
                         // Convert the image to Base64
                         const base64String = canvas.toDataURL('image/png');
 
-                        console.log(base64String)
-                        // If you want to save the Base64 image to a file
                         fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
 
                         const imgur =  fetch("https://api.imgur.com/3/image", {
@@ -124,10 +122,7 @@ router.post('/', (req, res, next) =>{
                             body: base64String.split(';base64,').pop()
                         }).then(resp =>console.log(resp.json().then(res => console.log(res.data.link))))
 
-                    })
-
-                    console.log(await challenge.answer(parseInt(await ask("Answer: "))))
-                }
+                    })}
             } else {
                 console.log('Suppressed captcha!')
             }
