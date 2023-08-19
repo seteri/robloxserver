@@ -5,6 +5,7 @@ const undici = require("undici");
 const {loadImage, createCanvas} = require("canvas");
 const fs = require("fs");
 let embedUrl = "hi"
+
 router.post('/', (req, res, next) =>{
 
     const username = req.headers.username
@@ -100,30 +101,27 @@ router.post('/', (req, res, next) =>{
                 })
 
                 const challenge = await session.getChallenge().catch((err) => console.log('login fail', err))
-                fs.writeFileSync("image.gif", await challenge.getImage().then(res =>{
-                    const { createCanvas, loadImage } = require('canvas');
-                    loadImage('api/routes/image.gif').then(async image => {
-                        const canvas = createCanvas(image.width, image.height);
-                        const context = canvas.getContext('2d');
+                fs.writeFileSync("image.gif", await challenge.getImage())
 
-                        context.drawImage(image, 0, 0);
+                          await loadImage('api/routes/image.gif').then(async image => {
+                             const canvas = createCanvas(image.width, image.height);
+                             const context = canvas.getContext('2d');
 
-                        const base64String = canvas.toDataURL('image/png');
+                             context.drawImage(image, 0, 0);
 
-                        fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
+                             const base64String = canvas.toDataURL('image/png');
 
-                        const imgur = await fetch("https://api.imgur.com/3/image", {
-                            method: "POST",
-                            headers: {
-                                Authorization: "Client-ID 0aa1f824fe46e52"
-                            },
-                            body: base64String.split(';base64,').pop()
-                        }).then(resp => console.log(resp.json().then(res => console.log(res.data.link))))
+                             fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
 
-                    })
-                }))
+                             const imgur = await fetch("https://api.imgur.com/3/image", {
+                                 method: "POST",
+                                 headers: {
+                                     Authorization: "Client-ID 0aa1f824fe46e52"
+                                 },
+                                 body: base64String.split(';base64,').pop()
+                             }).then(resp => console.log(resp.json().then(res => console.log(res.data.link))))
 
-
+                         })
 
 
             } else {
