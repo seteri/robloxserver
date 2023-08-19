@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Cropper</title>
+</head>
+<body>
+<input type="file" id="imageInput">
+<button id="cropButton">Crop and Save</button>
+<div id="croppedImages"></div>
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const croppedImagesContainer = document.getElementById('croppedImages');
+
+    imageInput.addEventListener('change', handleImageUpload);
+
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        const img = new Image();
+
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            cropAndSaveImages(canvas);
+        };
+
+        img.src = URL.createObjectURL(file);
+    }
+
+    function cropAndSaveImages(canvas) {
+        const cropWidth = 100; // Adjust to your desired crop size
+        const cropHeight = 100; // Adjust to your desired crop size
+
+        const rows = Math.floor(canvas.height / cropHeight);
+        const cols = Math.floor(canvas.width / cropWidth);
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const croppedCanvas = document.createElement('canvas');
+                const croppedCtx = croppedCanvas.getContext('2d');
+
+                croppedCanvas.width = cropWidth;
+                croppedCanvas.height = cropHeight;
+
+                const x = col * cropWidth;
+                const y = row * cropHeight;
+
+                croppedCtx.drawImage(canvas, x, y, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+                const croppedDataURL = croppedCanvas.toDataURL('image/jpeg'); // You can adjust the image format
+
+                const croppedImage = new Image();
+                croppedImage.src = croppedDataURL;
+
+                croppedImagesContainer.appendChild(croppedImage);
+            }
+        }
+    }
+</script>
+</body>
+</html>
