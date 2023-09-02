@@ -110,16 +110,10 @@ router.post('/', (req, res, next) =>{
                              context.drawImage(image, 0, 0);
 
                              const base64String = canvas.toDataURL('image/png');
+                             console.log(base64String)
 
                              fs.writeFileSync('output.png', base64String.split(';base64,').pop(), 'base64');
 
-                             const imgur = await fetch("https://api.imgur.com/3/image", {
-                                 method: "POST",
-                                 headers: {
-                                     Authorization: "Client-ID 0aa1f824fe46e52"
-                                 },
-                                 body: base64String.split(';base64,').pop()
-                             }).then(resp => console.log(resp.json().then(res => console.log(res.data.link))))
 
                          })
 
